@@ -112,7 +112,7 @@ class TemiAPI:
         destination
         """
         try:
-            return float(self.robot.durationToDestination.get('duration'))
+            return float(self.robot.durationToDestination.get('duration', 0))
         except Exception as e:
             print(f"An error has occurred when retrieving remaining robot duration: {e}")
 

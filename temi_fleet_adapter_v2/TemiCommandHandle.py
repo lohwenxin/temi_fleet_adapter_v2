@@ -164,6 +164,7 @@ class RobotCommandHandle(adpt.RobotCommandHandle):
         self._quit_path_event.clear()
 
         self.node.get_logger().info("Received new path to follow...")
+        self.node.get_logger().info("Waypoints in new path:", "".join(str(w) for w in waypoints))
 
         self.remaining_waypoints = self.get_remaining_waypoints(waypoints)
         assert next_arrival_estimator is not None
@@ -179,8 +180,8 @@ class RobotCommandHandle(adpt.RobotCommandHandle):
                     self.state == RobotState.WAITING):
                 # Check if we need to abort
                 if self._quit_path_event.is_set():
-                    self.node.get_logger().info("Aborting previously followed "
-                                                "path")
+                    self.node.get_logger().info("Aborting previously followed path")
+                    self.node.get_logger().info("Remaining waypoints" + "".join(str(w) for w in self.remaining_waypoints))
                     return
                 # State machine
                 if self.state == RobotState.IDLE:

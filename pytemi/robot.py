@@ -56,7 +56,7 @@ def _on_durationToDestination(client, userdata, msg):
     userdata["durationToDestination"] = json.loads(msg.payload)
 
 def _on_receiveTestConnection(client, userdata, msg):
-    print("[{}] [SUB] [TEST RECEIVE MESSAGE] {}".format(now(), str(msg.payload)))
+    print("[{}] [SUB] [TEST RECEIVE MESSAGE] {}".format(now(), json.loads(msg.payload)))
 
 
 class Robot:
