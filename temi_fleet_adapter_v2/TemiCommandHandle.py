@@ -174,11 +174,11 @@ class RobotCommandHandle(adpt.RobotCommandHandle):
 
         def _follow_path():
             target_pose = []
-            # while (
-            #         self.remaining_waypoints or
-            #         self.state == RobotState.MOVING or
-            #         self.state == RobotState.WAITING):
-            while self.remaining_waypoints:
+            while (
+                    self.remaining_waypoints or
+                    self.state == RobotState.MOVING or
+                    self.state == RobotState.WAITING):
+            # while self.remaining_waypoints:
                 # Check if we need to abort
                 if self._quit_path_event.is_set():
                     self.node.get_logger().info("Aborting previously followed path")

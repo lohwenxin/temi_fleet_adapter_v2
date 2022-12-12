@@ -46,10 +46,10 @@ robots:
     rmf_config:
       robot_state_update_frequency: 0.5
       start:
-        map_name: 'L2_JTC'
+        map_name: 'L1_JTC'
         # waypoint: "charger_deliverybot1" # Optional
         # orientation: 0.0 # Optional, radians
-        waypoint: "point_2" # Optional
+        waypoint: "tl_corner" # Optional
         orientation: 1.58 # Optional, radians
       charger:
         waypoint: "charging_point"
@@ -72,21 +72,36 @@ robots:
 # TRANSFORM CONFIG =============================================================
 # For computing transforms between Robot and RMF coordinate systems
 
-#home base
-#wooden area
-#data room
-#toilet
-
 reference_coordinates:
 #  rmf: [ [ 43.12, -41.83 ],
 #         [ 57.94, -43.35 ],
 #         [ 74.2, -45.25 ],
 #         [ 76.44, -69.14 ] ]
-  rmf: [[54.23, -52.62],
-        [73.01, -54.52],
-        [93.46, -56.82],
-        [95.96, -87.11]]
-  robot: [[0.000, 0.000],
-         [10.868, 11.0171],
-         [24.0287, 24.2614],
-         [46.1643, 9.9464]]
+
+# Level 1 JTC Reference Coordinates
+#side lift door
+#meeting room 4 door
+#outside turnstile
+#corner near meeting room 13
+  rmf: [[52.31, -60.67],
+        [65.6, -43.66],
+        [78.13, -83.5],
+        [90.88, -64.17]]
+  robot: [[0.0331, -27.840],
+         [-10.9867, -42.419],
+         [-22.6247, -8.409],
+         [-33.526, -25.2632]]
+
+# Level 2 JTC Reference Coordinates
+#home base
+#wooden area
+#data room
+#toilet
+#  rmf: [[54.23, -52.62],
+#        [73.01, -54.52],
+#        [93.46, -56.82],
+#        [95.96, -87.11]]
+#  robot: [[0.000, 0.000],
+#         [10.868, 11.0171],
+#         [24.0287, 24.2614],
+#         [46.1643, 9.9464]]
