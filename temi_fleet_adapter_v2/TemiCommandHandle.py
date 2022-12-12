@@ -164,7 +164,7 @@ class RobotCommandHandle(adpt.RobotCommandHandle):
         self._quit_path_event.clear()
 
         self.node.get_logger().info("Received new path to follow...")
-        self.node.get_logger().info("Waypoints in new path:", "".join(str(w) for w in waypoints))
+        self.node.get_logger().info("Waypoints in new path:" + "".join(str(w) for w in waypoints))
 
         self.remaining_waypoints = self.get_remaining_waypoints(waypoints)
         assert next_arrival_estimator is not None
@@ -174,14 +174,16 @@ class RobotCommandHandle(adpt.RobotCommandHandle):
 
         def _follow_path():
             target_pose = []
-            while (
-                    self.remaining_waypoints or
-                    self.state == RobotState.MOVING or
-                    self.state == RobotState.WAITING):
+            # while (
+            #         self.remaining_waypoints or
+            #         self.state == RobotState.MOVING or
+            #         self.state == RobotState.WAITING):
+            while self.remaining_waypoints:
                 # Check if we need to abort
                 if self._quit_path_event.is_set():
                     self.node.get_logger().info("Aborting previously followed path")
-                    self.node.get_logger().info("Remaining waypoints" + "".join(str(w) for w in self.remaining_waypoints))
+                    self.node.get_logger().info(
+                        "Remaining waypoints" + "".join(str(w) for w in self.remaining_waypoints))
                     return
                 # State machine
                 if self.state == RobotState.IDLE:
@@ -194,10 +196,7 @@ class RobotCommandHandle(adpt.RobotCommandHandle):
                         target_pose[:2])
                     theta = target_pose[2] + \
                             self.transforms['orientation_offset']
-                    # ------------------------ #
-                    # IMPLEMENT YOUR CODE HERE #
-                    # Ensure x, y, theta are in units that api.navigate() #
-                    # ------------------------ #
+                    print('theta=================', theta)
                     response = self.api.navigate(self.name,
                                                  [x, y, theta],
                                                  self.map_name)
@@ -218,7 +217,7 @@ class RobotCommandHandle(adpt.RobotCommandHandle):
                     with self._lock:
                         if self.target_waypoint is not None:
                             waypoint_wait_time = self.target_waypoint.time
-                            if (waypoint_wait_time < time_now):
+                            if waypoint_wait_time < time_now:
                                 self.state = RobotState.IDLE
                             else:
                                 if self.path_index is not None:
@@ -269,12 +268,19 @@ class RobotCommandHandle(adpt.RobotCommandHandle):
                             self.next_arrival_estimator(
                                 self.path_index, timedelta(seconds=duration))
             self.path_finished_callback()
+
             self.node.get_logger().info(
                 f"Robot {self.name} has successfully navigated along "
                 f"requested path.")
 
+        # self._quit_path_event.clear()
+        #
+        # if self._follow_path_thread is not None:
+        #     self._follow_path_thread.join()
+
         self._follow_path_thread = threading.Thread(
             target=_follow_path)
+
         self._follow_path_thread.start()
 
     def dock(
@@ -299,7 +305,7 @@ class RobotCommandHandle(adpt.RobotCommandHandle):
 
         # Get the waypoint that the robot is trying to dock into
         dock_waypoint = self.graph.find_waypoint(self.dock_name)
-        assert (dock_waypoint)
+        assert dock_waypoint
         self.dock_waypoint_index = dock_waypoint.index
 
         def _dock():

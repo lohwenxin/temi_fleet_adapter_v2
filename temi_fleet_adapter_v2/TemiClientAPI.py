@@ -22,7 +22,9 @@
 '''
 
 import time
-import pytemi as temi
+from pytemi.robot import Robot
+from pytemi.connect import connect
+# import pytemi as temi
 
 
 class TemiAPI:
@@ -34,16 +36,16 @@ class TemiAPI:
     def __init__(self, prefix: str):
         # parameters
         MQTT_HOST = "175.41.184.236"
-        MQTT_PORT = 1884
+        MQTT_PORT = 1883
         # MQTT_HOST = "broker.mqttdashboard.com"
         # MQTT_PORT = 1883
         TEMI_SERIAL = "00120223188"
 
         # connect to the MQTT broker
-        mqtt_client = temi.connect(MQTT_HOST, MQTT_PORT)
+        mqtt_client = connect(MQTT_HOST, MQTT_PORT)
 
         # create robot object
-        self.robot = temi.Robot(mqtt_client, TEMI_SERIAL)
+        self.robot = Robot(mqtt_client, TEMI_SERIAL)
 
     def check_connection(self):
         """
@@ -112,7 +114,7 @@ class TemiAPI:
         destination
         """
         try:
-            return float(self.robot.durationToDestination.get('duration', 0))
+            return float(self.robot.durationToDestination.get('duration', 0.0))
         except Exception as e:
             print(f"An error has occurred when retrieving remaining robot duration: {e}")
 
