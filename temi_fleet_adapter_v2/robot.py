@@ -240,7 +240,6 @@ class Robot:
         """Get Battery Data"""
         if not self.silent:
             print("[CMD] Get Battery Data")
-        print("hello'''''''''''''''''''''''''''''")
         topic = "temi/" + self.id + "/command/getData/batteryData"
 
         try:
@@ -256,6 +255,16 @@ class Robot:
         topic = "temi/" + self.id + "/command/getData/currentPosition"
 
         self.client.publish(topic, "{}", qos=1)
+
+    def loadMap(self, mapName, x=0.0, y=0.0, yaw=0.0, tiltAngle=22):
+        """Load Map: Will be loaded to position (0, 0) in new map by default if no position is specified"""
+        if not self.silent:
+            print("[CMD] Load New Map with Map Name = {} ".format(mapName))
+
+        topic = "temi/" + self.id + "/command/getData/loadMap"
+        payload = json.dumps({"mapName": mapName, "x": x, "y": y, "yaw": yaw, "tiltAngle": tiltAngle})
+
+        self.client.publish(topic, payload, qos=1)
 
     @property
     def locations(self):
