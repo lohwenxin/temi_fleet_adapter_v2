@@ -9,8 +9,10 @@ from datetime import datetime
 import paho.mqtt.client as mqtt
 import socket
 import time
-
-from pytemi.robot import now
+import os
+import ssl
+import certifi
+from .robot import now
 
 
 def _on_connect(client, userdata, flags, rc):
@@ -28,7 +30,7 @@ def _on_connect(client, userdata, flags, rc):
 
 def _on_disconnect(client, userdata, rc):
     """Disconnect from MQTT broker"""
-    print("DISCONNECTED```````````````````````````````````````")
+    print("DISCONNECTED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!```````````````````````````````````````")
     print(
         "[STATUS] Disconnected from: {} (rc:{})".format(
             client._client_id.decode("ascii"), str(rc)
@@ -43,6 +45,7 @@ def _on_message(client, userdata, msg):
 
 
 def connect(host, port, username=None, password=None):
+    print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
     """Connect to MQTT broker"""
     client_id = socket.gethostname() + "-" + datetime.now().strftime("%Y%m%d%H%M%S")
 
@@ -56,9 +59,21 @@ def connect(host, port, username=None, password=None):
     # set username and password
     if username and password:
         client.username_pw_set(username=username, password=password)
+        #client.username_pw_set(username=username, password=password)
 
     # connect to MQTT broker
+
+    client.tls_set(ca_certs=os.path.relpath(certifi.where()),
+            certfile=None,
+            keyfile=None,
+            cert_reqs=ssl.CERT_REQUIRED,
+            tls_version=ssl.PROTOCOL_TLSv1_2,
+            ciphers=None)
+
+    client.tls_insecure_set(False)
+    
     client.connect(host=host, port=port, keepalive=60, bind_address="")
+    
 
     # start listening to topics
     client.loop_start()
@@ -72,4 +87,4 @@ def connect(host, port, username=None, password=None):
 
 if __name__ == "__main__":
     # connect to the MQTT server
-    mqtt_client = connect("broker.mqttdashboard.com", 1883)
+    mqtt_client = connect('host','port','username','password')

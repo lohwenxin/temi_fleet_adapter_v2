@@ -36,3 +36,7 @@ ENV/
 env.bak/
 venv.bak/
 
+.vscode/settings.json
+.vscode/c_cpp_properties.json
+configs/mqtt.yaml
+temi_fleet_adapter_v2/test(2).py

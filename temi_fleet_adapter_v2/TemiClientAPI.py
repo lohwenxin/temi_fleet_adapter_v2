@@ -1,4 +1,4 @@
-# Copyright 2021 Open Source Robotics Foundation, Inc.
+
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,9 +22,11 @@
 '''
 
 import time
-from pytemi.robot import Robot
-from pytemi.connect import connect
-# import pytemi as temi
+from .TemiCommandHandle import RobotCommandHandle
+from .connect import connect    
+from .robot import Robot
+import yaml
+import os
 
 
 class TemiAPI:
@@ -34,15 +36,21 @@ class TemiAPI:
     # requirements of their robot's API
 
     def __init__(self, prefix: str):
-        # parameters
-        MQTT_HOST = "175.41.184.236"
-        MQTT_PORT = 1883
-        # MQTT_HOST = "broker.mqttdashboard.com"
-        # MQTT_PORT = 1883
-        TEMI_SERIAL = "00120223188"
+        #find yaml file in configs folder
+        with open('mqtt.yaml', "r") as stream:
+            try:
+                # parameters
+                MQTT = yaml.safe_load(stream)
+                MQTT_HOST = MQTT['HOST']
+                MQTT_PORT = MQTT['PORT']
+                MQTT_USER = MQTT['USERNAME']
+                MQTT_PASSWORD = MQTT['PASSWORD']
+                TEMI_SERIAL = MQTT['SERIAL']
+            except yaml.YAMLError as exc:
+                print(exc)
 
         # connect to the MQTT broker
-        mqtt_client = connect(MQTT_HOST, MQTT_PORT)
+        mqtt_client = connect(MQTT_HOST, MQTT_PORT,MQTT_USER,MQTT_PASSWORD)
 
         # create robot object
         self.robot = Robot(mqtt_client, TEMI_SERIAL)

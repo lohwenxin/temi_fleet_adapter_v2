@@ -56,7 +56,7 @@ def _on_durationToDestination(client, userdata, msg):
     userdata["durationToDestination"] = json.loads(msg.payload)
 
 def _on_receiveTestConnection(client, userdata, msg):
-    print("[{}] [SUB] [TEST RECEIVE MESSAGE] {}".format(now(), json.loads(msg.payload)))
+    print("[{}] [SUB] [TEST RECEIVE MESSAGE] {}".format(now(), msg.payload))
 
 
 class Robot:
@@ -101,8 +101,6 @@ class Robot:
 
         # call method to initialize battery information
         self.get_battery_data()
-        time.sleep(1)
-        print('GOT DATA', self.battery)
         self.get_current_position()
         time.sleep(1)
 
@@ -242,7 +240,7 @@ class Robot:
         """Get Battery Data"""
         if not self.silent:
             print("[CMD] Get Battery Data")
-
+        print("hello'''''''''''''''''''''''''''''")
         topic = "temi/" + self.id + "/command/getData/batteryData"
 
         try:
