@@ -40,3 +40,4 @@ venv.bak/
 .vscode/c_cpp_properties.json
 configs/mqtt.yaml
 temi_fleet_adapter_v2/test(2).py
+temi_fleet_adapter_v2/test_2.py
