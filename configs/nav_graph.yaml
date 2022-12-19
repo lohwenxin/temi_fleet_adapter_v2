@@ -4,130 +4,142 @@ levels:
     lanes:
     - - 0
       - 1
-      - {door_name: ''}
+      - {door_name: '', speed_limit: 0}
     - - 1
       - 0
-      - {door_name: ''}
+      - {door_name: '', speed_limit: 0}
     - - 2
       - 3
-      - {}
+      - {speed_limit: 0}
     - - 3
       - 2
-      - {}
+      - {speed_limit: 0}
     - - 3
       - 4
-      - {}
+      - {speed_limit: 0}
     - - 4
       - 3
-      - {}
+      - {speed_limit: 0}
     - - 4
       - 5
-      - {door_name: ''}
+      - {door_name: '', speed_limit: 0}
     - - 5
       - 4
-      - {door_name: ''}
+      - {door_name: '', speed_limit: 0}
     - - 2
       - 6
-      - {}
+      - {speed_limit: 0}
     - - 6
       - 2
-      - {}
+      - {speed_limit: 0}
     - - 6
       - 7
-      - {}
+      - {speed_limit: 0}
     - - 7
       - 6
-      - {}
+      - {speed_limit: 0}
     - - 8
       - 9
-      - {}
+      - {speed_limit: 0}
     - - 9
       - 8
-      - {}
+      - {speed_limit: 0}
     - - 6
       - 9
-      - {}
+      - {speed_limit: 0}
     - - 9
       - 6
-      - {}
+      - {speed_limit: 0}
     - - 9
       - 10
-      - {}
+      - {speed_limit: 0}
     - - 10
       - 9
-      - {}
+      - {speed_limit: 0}
     - - 11
       - 12
-      - {}
+      - {speed_limit: 0}
     - - 12
       - 11
-      - {}
+      - {speed_limit: 0}
     - - 1
       - 13
-      - {}
+      - {speed_limit: 0}
     - - 13
       - 1
-      - {}
+      - {speed_limit: 0}
     - - 13
       - 14
-      - {}
+      - {speed_limit: 0}
     - - 14
       - 13
-      - {}
+      - {speed_limit: 0}
     - - 10
       - 14
-      - {}
+      - {speed_limit: 0}
     - - 14
       - 10
-      - {}
+      - {speed_limit: 0}
     - - 15
       - 16
-      - {}
+      - {speed_limit: 0}
     - - 16
       - 15
-      - {}
+      - {speed_limit: 0}
     - - 16
       - 17
-      - {}
+      - {speed_limit: 0}
     - - 17
       - 16
-      - {}
+      - {speed_limit: 0}
     - - 17
       - 18
-      - {}
+      - {speed_limit: 0}
     - - 18
       - 17
-      - {}
+      - {speed_limit: 0}
     - - 18
       - 5
-      - {}
+      - {speed_limit: 0}
     - - 5
       - 18
-      - {}
+      - {speed_limit: 0}
     - - 18
       - 19
-      - {}
+      - {speed_limit: 0}
     - - 19
       - 18
-      - {}
+      - {speed_limit: 0}
     - - 11
       - 19
-      - {}
+      - {speed_limit: 0}
     - - 19
       - 11
-      - {}
+      - {speed_limit: 0}
     - - 20
       - 21
-      - {}
+      - {speed_limit: 0}
     - - 21
       - 20
-      - {}
+      - {speed_limit: 0}
     - - 21
       - 0
-      - {}
+      - {speed_limit: 0}
     - - 0
       - 21
-      - {}
+      - {speed_limit: 0}
+    - - 10
+      - 22
+      - {speed_limit: 0}
+    - - 22
+      - 10
+      - {speed_limit: 0}
+    - - 22
+      - 23
+      - {speed_limit: 0}
+    - - 23
+      - 22
+      - {speed_limit: 0}
     vertices:
     - - 51.834867503104775
       - -58.37306686496059
@@ -195,20 +207,26 @@ levels:
     - - 48.06707685755162
       - -52.61445538414357
       - {name: ''}
+    - - 50.8750022802422
+      - -88.98614841394551
+      - {name: ''}
+    - - 51.69767348870945
+      - -92.44136748950797
+      - {name: L1_home_base}
   L22_JTC:
     lanes:
     - - 0
       - 1
-      - {is_bidirectional: false}
+      - {is_bidirectional: false, speed_limit: 0}
     - - 1
       - 2
-      - {is_bidirectional: false}
+      - {is_bidirectional: false, speed_limit: 0}
     - - 2
       - 3
-      - {is_bidirectional: false}
+      - {is_bidirectional: false, speed_limit: 0}
     - - 3
       - 4
-      - {is_bidirectional: false}
+      - {is_bidirectional: false, speed_limit: 0}
     vertices:
     - - 66.48590012386238
       - -93.63028236588195
@@ -229,76 +247,82 @@ levels:
     lanes:
     - - 0
       - 1
-      - {}
+      - {speed_limit: 0}
     - - 1
       - 0
-      - {}
+      - {speed_limit: 0}
     - - 1
       - 2
-      - {}
+      - {speed_limit: 0}
     - - 2
       - 1
-      - {}
+      - {speed_limit: 0}
     - - 2
       - 3
-      - {}
+      - {speed_limit: 0}
     - - 3
       - 2
-      - {}
+      - {speed_limit: 0}
     - - 3
       - 4
-      - {}
+      - {speed_limit: 0}
     - - 4
       - 3
-      - {}
+      - {speed_limit: 0}
     - - 4
       - 5
-      - {}
+      - {speed_limit: 0}
     - - 5
       - 4
-      - {}
+      - {speed_limit: 0}
     - - 5
       - 6
-      - {}
+      - {speed_limit: 0}
     - - 6
       - 5
-      - {}
+      - {speed_limit: 0}
     - - 2
       - 7
-      - {}
+      - {speed_limit: 0}
     - - 7
       - 2
-      - {}
+      - {speed_limit: 0}
     - - 0
       - 8
-      - {}
+      - {speed_limit: 0}
     - - 8
       - 0
-      - {}
+      - {speed_limit: 0}
     - - 9
       - 8
-      - {}
+      - {speed_limit: 0}
     - - 8
       - 9
-      - {}
+      - {speed_limit: 0}
     - - 9
       - 10
-      - {}
+      - {speed_limit: 0}
     - - 10
       - 9
-      - {}
+      - {speed_limit: 0}
     - - 6
       - 11
-      - {}
+      - {speed_limit: 0}
     - - 11
       - 6
-      - {}
+      - {speed_limit: 0}
     - - 11
       - 12
-      - {}
+      - {speed_limit: 0}
     - - 12
       - 11
-      - {}
+      - {speed_limit: 0}
+    - - 1
+      - 13
+      - {speed_limit: 0}
+    - - 13
+      - 1
+      - {speed_limit: 0}
     vertices:
     - - 53.36247062376679
       - -59.09143898890406
@@ -339,20 +363,23 @@ levels:
     - - 86.66338131911402
       - -86.00252277471304
       - {is_charger: true, name: charging_point}
+    - - 54.37518727253429
+      - -52.41323126405203
+      - {name: L2_home_base}
   L6_JTC:
     lanes:
     - - 0
       - 1
-      - {}
+      - {speed_limit: 0}
     - - 1
       - 0
-      - {}
+      - {speed_limit: 0}
     - - 0
       - 2
-      - {}
+      - {speed_limit: 0}
     - - 2
       - 0
-      - {}
+      - {speed_limit: 0}
     vertices:
     - - 80.32272919266326
       - -93.63032240961422
