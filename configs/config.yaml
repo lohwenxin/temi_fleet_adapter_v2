@@ -6,7 +6,7 @@ rmf_fleet:
   fleet_manager:
     prefix: "ws://172.16.1.62:8175"
   limits:
-    linear: [0.4, 0.2] # velocity, acceleration
+    linear: [0.6, 0.2] # velocity, acceleration
     angular: [0.3, 0.35] # velocity, acceleration
   profile: # Robot profile is modelled as a circle
     footprint: 0.5 # radius in m
@@ -17,14 +17,14 @@ rmf_fleet:
     capacity: 40.0 # Ahr
     charging_current: 26.4 # A
   mechanical_system:
-    mass: 80.0 # kg
+    mass: 12.0 # kg
     moment_of_inertia: 20.0 #kgm^2
     friction_coefficient: 0.20
   ambient_system:
     power: 20.0 # W
   tool_system:
     power: 760.0 # W
-  recharge_threshold: 0.20 # Battery level below which robots in this fleet will not operate
+  recharge_threshold: 0.15 # Battery level below which robots in this fleet will not operate
   recharge_soc: 1.0 # Battery level to which robots in this fleet should be charged up to during recharging tasks
   publish_fleet_state: True
   account_for_battery_drain: True
@@ -46,13 +46,13 @@ robots:
     rmf_config:
       robot_state_update_frequency: 0.5
       start:
-        map_name: 'L1_JTC'
+        map_name: 'L6_JTC'
         # waypoint: "charger_deliverybot1" # Optional
         # orientation: 0.0 # Optional, radians
-        waypoint: "tl_corner" # Optional
+        waypoint: "waiting_point" # Optional
         orientation: 1.58 # Optional, radians
       charger:
-        waypoint: "charging_point"
+         waypoint: "waiting_point"
   # Configuration for the second robot in this fleet if there is a second robot
   # Uncomment if more than one robot exists.
   # deliverybot2:
@@ -83,14 +83,14 @@ reference_coordinates:
 #meeting room 4 door
 #outside turnstile
 #corner near meeting room 13
-  rmf: [[52.31, -60.67],
-        [65.6, -43.66],
-        [78.13, -83.5],
-        [90.88, -64.17]]
-  robot: [[0.0331, -27.840],
-         [-10.9867, -42.419],
-         [-22.6247, -8.409],
-         [-33.526, -25.2632]]
+  # rmf: [[52.31, -60.67],
+  #       [65.6, -43.66],
+  #       [78.13, -83.5],
+  #       [90.88, -64.17]]
+  # robot: [[0.3201, -27.725],
+  #      [-11.6669, -42.2013],
+  #      [-22.4885, -8.3317],
+  #      [-33.747, -25.2367]]
 
 # Level 2 JTC Reference Coordinates
 #home base
@@ -105,3 +105,17 @@ reference_coordinates:
 #         [10.868, 11.0171],
 #         [24.0287, 24.2614],
 #         [46.1643, 9.9464]]
+
+#  Level 6 JTC Reference Coordinates
+# top right
+# bottom right
+# top left
+# bottom left
+  rmf: [[78.6874, -88.0694],
+        [82.0182, -89.3615],
+        [78.3429, -97.7745],
+        [82.0182, -97.8032]]
+  robot: [[-29.8638, -4.7555],
+        [-31.3585, -4.0888],
+        [-28.5209, 3.1438],
+        [-31.1281, 3.5524]]
