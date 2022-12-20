@@ -4,33 +4,33 @@ levels:
     lanes:
     - - 0
       - 1
-      - {door_name: '', speed_limit: 0}
+      - {speed_limit: 0}
     - - 1
       - 0
-      - {door_name: '', speed_limit: 0}
-    - - 2
-      - 3
       - {speed_limit: 0}
-    - - 3
+    - - 1
       - 2
       - {speed_limit: 0}
+    - - 2
+      - 1
+      - {speed_limit: 0}
+    - - 2
+      - 3
+      - {door_name: '', speed_limit: 0}
     - - 3
+      - 2
+      - {door_name: '', speed_limit: 0}
+    - - 0
       - 4
       - {speed_limit: 0}
     - - 4
-      - 3
+      - 0
       - {speed_limit: 0}
     - - 4
       - 5
-      - {door_name: '', speed_limit: 0}
+      - {speed_limit: 0}
     - - 5
       - 4
-      - {door_name: '', speed_limit: 0}
-    - - 2
-      - 6
-      - {speed_limit: 0}
-    - - 6
-      - 2
       - {speed_limit: 0}
     - - 6
       - 7
@@ -38,23 +38,29 @@ levels:
     - - 7
       - 6
       - {speed_limit: 0}
-    - - 8
-      - 9
+    - - 4
+      - 7
       - {speed_limit: 0}
-    - - 9
+    - - 7
+      - 4
+      - {speed_limit: 0}
+    - - 7
       - 8
       - {speed_limit: 0}
-    - - 6
-      - 9
-      - {speed_limit: 0}
-    - - 9
-      - 6
+    - - 8
+      - 7
       - {speed_limit: 0}
     - - 9
       - 10
       - {speed_limit: 0}
     - - 10
       - 9
+      - {speed_limit: 0}
+    - - 8
+      - 10
+      - {speed_limit: 0}
+    - - 10
+      - 8
       - {speed_limit: 0}
     - - 11
       - 12
@@ -62,28 +68,28 @@ levels:
     - - 12
       - 11
       - {speed_limit: 0}
-    - - 1
+    - - 12
       - 13
       - {speed_limit: 0}
     - - 13
-      - 1
+      - 12
+      - {speed_limit: 0}
+    - - 13
+      - 3
+      - {speed_limit: 0}
+    - - 3
+      - 13
       - {speed_limit: 0}
     - - 13
       - 14
       - {speed_limit: 0}
     - - 14
       - 13
-      - {speed_limit: 0}
-    - - 10
-      - 14
-      - {speed_limit: 0}
-    - - 14
-      - 10
       - {speed_limit: 0}
     - - 15
-      - 16
+      - 14
       - {speed_limit: 0}
-    - - 16
+    - - 14
       - 15
       - {speed_limit: 0}
     - - 16
@@ -98,67 +104,79 @@ levels:
     - - 18
       - 17
       - {speed_limit: 0}
-    - - 18
-      - 5
-      - {speed_limit: 0}
-    - - 5
-      - 18
-      - {speed_limit: 0}
-    - - 18
+    - - 8
       - 19
       - {speed_limit: 0}
     - - 19
+      - 8
+      - {speed_limit: 0}
+    - - 19
+      - 20
+      - {speed_limit: 0}
+    - - 20
+      - 19
+      - {speed_limit: 0}
+    - - 18
+      - 9
+      - {speed_limit: 0}
+    - - 9
       - 18
       - {speed_limit: 0}
     - - 11
-      - 19
+      - 21
       - {speed_limit: 0}
-    - - 19
+    - - 21
       - 11
       - {speed_limit: 0}
-    - - 20
-      - 21
+    - - 22
+      - 15
       - {speed_limit: 0}
-    - - 21
-      - 20
-      - {speed_limit: 0}
-    - - 21
-      - 0
-      - {speed_limit: 0}
-    - - 0
-      - 21
-      - {speed_limit: 0}
-    - - 10
+    - - 15
       - 22
       - {speed_limit: 0}
-    - - 22
-      - 10
-      - {speed_limit: 0}
-    - - 22
+    - - 0
       - 23
       - {speed_limit: 0}
     - - 23
-      - 22
+      - 0
+      - {speed_limit: 0}
+    - - 23
+      - 24
+      - {speed_limit: 0}
+    - - 24
+      - 23
+      - {speed_limit: 0}
+    - - 24
+      - 25
+      - {speed_limit: 0}
+    - - 25
+      - 24
+      - {speed_limit: 0}
+    - - 24
+      - 26
+      - {speed_limit: 0}
+    - - 26
+      - 24
+      - {speed_limit: 0}
+    - - 9
+      - 27
+      - {speed_limit: 0}
+    - - 27
+      - 9
       - {speed_limit: 0}
     vertices:
-    - - 51.834867503104775
-      - -58.37306686496059
-      - {name: l1door_inside}
-    - - 50.13675815755668
-      - -61.254692030802666
-      - {name: l1door_outside}
     - - 68.27538986847566
       - -81.17591815868731
       - {name: turnstile2}
     - - 79.1613232127294
       - -81.192965935624
-      - {name: turnstile1}
+      - {name: L1_turnstile1}
     - - 79.15943867956463
       - -82.95874451819633
-      - {name: turnstile1_outside}
+      - {name: L1_turnstile1_outside}
     - - 79.153176230894
       - -84.90564123431209
-      - {name: turnstile1_inside}
+      - {name: L1_turnstile1_inside}
     - - 58.84567878986719
       - -81.18047003110068
       - {name: ''}
@@ -174,26 +192,17 @@ levels:
     - - 53.75523579082414
       - -81.12689130358535
       - {name: ''}
-    - - 80.11512893664678
-      - -93.45457949734252
-      - {name: ''}
-    - - 77.01336130434157
-      - -93.46246554381663
-      - {name: ''}
-    - - 49.13873838631198
-      - -62.62840073664891
-      - {name: tl_corner}
+    - - 48.35822273509976
+      - -67.69506962499793
+      - {name: L1_tl_corner}
     - - 49.503786956737045
       - -81.2980938934003
-      - {name: bl_corner}
-    - - 66.51364128759415
-      - -93.5181607470401
-      - {lift: l22_lift, name: ''}
-    - - 69.83479757309662
-      - -93.57234832373173
+      - {name: L1_bl_corner}
+    - - 69.98631403954418
+      - -93.61728719150703
       - {name: ''}
     - - 69.98631403954418
-      - -85.68276472582772
+      - -85.71999150403643
       - {name: ''}
     - - 79.1058599520493
       - -85.71999150403643
@@ -201,18 +210,45 @@ levels:
     - - 80.15261665021677
       - -86.82134167834641
       - {name: ''}
+    - - 80.15281959994219
+      - -96.91304576851198
+      - {name: ''}
     - - 45.89563076664894
       - -51.11433799216809
       - {lift: kitchen_lift, lift_cabin: kitchen_lift, name: ''}
     - - 48.06707685755162
       - -52.61445538414357
       - {name: ''}
-    - - 50.8750022802422
-      - -88.98614841394551
+    - - 50.33912802663514
+      - -56.50595838375944
+      - {name: L1_door_inside}
+    - - 50.66268787461733
+      - -88.93674465221059
       - {name: ''}
-    - - 51.69767348870945
-      - -92.44136748950797
+    - - 50.72278998616456
+      - -92.43864216462354
       - {name: L1_home_base}
+    - - 66.13084911260232
+      - -93.61728719150703
+      - {lift: l22_lift, lift_cabin: l22_lift, name: ''}
+    - - 76.5913708395225
+      - -96.91304576851198
+      - {lift: l6_lift, lift_cabin: l6_lift, name: ''}
+    - - 68.8395611123722
+      - -70.58420393068117
+      - {name: ''}
+    - - 77.19587109314513
+      - -70.61632797293603
+      - {name: ''}
+    - - 90.37310683758098
+      - -70.61632797293603
+      - {name: L1_reception}
+    - - 74.72110214116812
+      - -52.61813747201935
+      - {name: L1_meeting_room}
+    - - 60.51624495839171
+      - -65.56873635877807
+      - {name: L1_base}
   L22_JTC:
     lanes:
     - - 0
@@ -299,73 +335,73 @@ levels:
     - - 8
       - 9
       - {speed_limit: 0}
-    - - 9
+    - - 6
       - 10
       - {speed_limit: 0}
     - - 10
-      - 9
+      - 6
       - {speed_limit: 0}
-    - - 6
+    - - 10
       - 11
       - {speed_limit: 0}
     - - 11
-      - 6
+      - 10
       - {speed_limit: 0}
-    - - 11
+    - - 1
       - 12
       - {speed_limit: 0}
     - - 12
-      - 11
+      - 1
       - {speed_limit: 0}
-    - - 1
+    - - 9
       - 13
       - {speed_limit: 0}
     - - 13
-      - 1
+      - 9
       - {speed_limit: 0}
     vertices:
     - - 53.36247062376679
       - -59.09143898890406
-      - {name: point_1}
+      - {name: L2_point_1}
     - - 62.43725486265532
       - -52.03453859124046
-      - {name: point_2}
+      - {name: L2_point_2}
     - - 75.55768981906397
       - -51.40212196945731
-      - {name: point_3}
+      - {name: L2_point_3}
     - - 89.03982554499125
       - -59.48672595754473
-      - {name: point_4}
+      - {name: L2_point_4}
     - - 90.79464972499657
       - -68.92233859872208
-      - {name: point_5}
+      - {name: L2_point_5}
     - - 89.67203555367797
       - -71.7983590575125
-      - {name: point_6}
+      - {name: L2_point_6}
     - - 86.70666013608935
       - -72.74272846890125
-      - {name: point_7}
+      - {name: L2_point_7}
     - - 80.37657972805988
       - -52.50189226508897
-      - {name: kitchen}
+      - {name: L2_kitchen}
     - - 49.56621302920713
       - -56.430092818549014
-      - {name: door_inside}
+      - {name: L2_door_inside}
     - - 48.996895070940795
       - -52.9461930172082
-      - {name: lift_outside}
-    - - 46.02594023790364
-      - -51.56543227584035
-      - {lift: kitchen_lift, name: lift_inside}
+      - {name: L2_lift_outside}
     - - 86.63931464884129
       - -84.3788382206055
-      - {name: point_8}
+      - {name: L2_point_8}
     - - 86.66338131911402
       - -86.00252277471304
-      - {is_charger: true, name: charging_point}
-    - - 54.37518727253429
-      - -52.41323126405203
+      - {is_charger: true, name: L2_charging_point}
+    - - 54.66404175394285
+      - -53.0485121853086
       - {name: L2_home_base}
+    - - 45.89095810540678
+      - -51.11845761775214
+      - {lift: kitchen_lift, lift_cabin: kitchen_lift, name: ''}
   L6_JTC:
     lanes:
     - - 0
@@ -374,19 +410,19 @@ levels:
     - - 1
       - 0
       - {speed_limit: 0}
-    - - 0
-      - 2
-      - {speed_limit: 0}
     - - 2
       - 0
       - {speed_limit: 0}
+    - - 0
+      - 2
+      - {speed_limit: 0}
     vertices:
-    - - 80.32272919266326
-      - -93.63032240961422
+    - - 80.32729156926146
+      - -96.89022596455425
       - {name: lift2_outside}
-    - - 76.91352310425751
-      - -93.6256195960301
-      - {name: lift2_inside}
-    - - 81.70922304856198
-      - -93.62726227950118
+    - - 81.71378699218634
+      - -96.8882855039963
       - {is_charger: true, name: waiting_point}
+    - - 76.59770099069426
+      - -96.89544568853987
+      - {lift: l6_lift, lift_cabin: l6_lift, name: ''}

@@ -33,7 +33,7 @@ def _on_battery(client, userdata, msg):
 
 def _on_goto(client, userdata, msg):
     d = json.loads(msg.payload)
-    print("[{}] [SUB] [GOTO] {}".format(now(), str(msg.payload)))
+    #print("[{}] [SUB] [GOTO] {}".format(now(), str(msg.payload)))
     userdata["goto"]["location"] = d["location"]
     userdata["goto"]["status"] = d["status"]
 

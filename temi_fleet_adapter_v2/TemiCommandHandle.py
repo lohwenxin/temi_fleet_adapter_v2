@@ -31,6 +31,7 @@ import time
 
 from datetime import timedelta
 
+#TO GET A LOG FILE, ADD 'EXPORT=~/temi_ws/log' to the setup.bash
 
 # States for RobotCommandHandle's state machine used when guiding robot along
 # a new path
@@ -65,7 +66,7 @@ class RobotCommandHandle(adpt.RobotCommandHandle):
         self.vehicle_traits = vehicle_traits
         self.transforms = transforms
         self.map_name = map_name
-        # Get the index of the charger waypoint
+        # Get the index of the charger waypseloint
         waypoint = self.graph.find_waypoint(charger_waypoint)
         assert waypoint, f"Charger waypoint {charger_waypoint} \
           does not exist in the navigation graph"
@@ -179,20 +180,20 @@ class RobotCommandHandle(adpt.RobotCommandHandle):
                     self.state == RobotState.MOVING or
                     self.state == RobotState.WAITING):
                 
-                # Slice current position (At position 1)
-                # self.remaining_waypoints = self.remaining_waypoints[1:]
                 for idx, n in enumerate(self.remaining_waypoints):
-                    self.node.get_logger().warn(str(idx) + ", " + str(n[1].position) + ", " + str(n[0]))
-            # while self.remaining_waypoints:
+                    self.node.get_logger().warn(str(idx) + ", " + str(n[1].position) + ", " + str(n[1].time))
+
                 # Check if we need to abort
                 if self._quit_path_event.is_set():
                     self.node.get_logger().info("Aborting previously followed path")
                     self.node.get_logger().info(
                         "Remaining waypoints" + "".join(str(w) for w in self.remaining_waypoints))
                     return
+
                 # State machine
                 if self.state == RobotState.IDLE:
                     self.node.get_logger().info("IDLE"+ "".join(str(w) for w in self.remaining_waypoints))
+
                     # Assign the next waypoint
                     if len(self.remaining_waypoints) == 1:
                         self.target_waypoint = self.remaining_waypoints[0][1]
@@ -200,6 +201,7 @@ class RobotCommandHandle(adpt.RobotCommandHandle):
                     else:
                         self.target_waypoint = self.remaining_waypoints[1][1]
                         self.path_index = self.remaining_waypoints[1][0]
+
                     # Move robot to next waypoint
                     target_pose = self.target_waypoint.position
                     [x, y] = self.transforms["rmf_to_robot"].transform(
@@ -212,8 +214,6 @@ class RobotCommandHandle(adpt.RobotCommandHandle):
                                                  self.map_name)
                     self.node.get_logger().warn("COORDINATES TO MOVE TO: " + str(x) + "," + str(y))
                     if response:
-                        # self.remaining_waypoints.pop()
-                        # self.remaining_waypoints = self.remaining_waypoints[1:] 
                         self.remaining_waypoints = self.remaining_waypoints[2:] if (len(self.remaining_waypoints) > 1) else [] 
                         self.state = RobotState.MOVING
                     else:
@@ -313,7 +313,7 @@ class RobotCommandHandle(adpt.RobotCommandHandle):
             to initiate the robot specific process. This could be to start a
             cleaning process or load/unload a cart for delivery.
         '''
-
+        print('DOCKING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
         self._quit_dock_event.clear()
         if self._dock_thread is not None:
             self._dock_thread.join()
