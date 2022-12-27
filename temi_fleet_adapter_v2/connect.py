@@ -25,7 +25,7 @@ def _on_connect(client, userdata, flags, rc):
 
     # subscribing in on_connect() means that if we lose the connection and
     # reconnect, then subscriptions will be renewed
-    client.subscribe("temi/#")
+    client.subscribe("temi/#", qos=2)
 
 
 def _on_disconnect(client, userdata, rc):

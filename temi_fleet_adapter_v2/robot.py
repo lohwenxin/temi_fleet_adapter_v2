@@ -6,8 +6,12 @@
 import json
 import re
 import time
+import uuid
 
 from datetime import datetime
+
+from paho.mqtt.packettypes import PacketTypes
+from paho.mqtt.properties import Properties
 
 
 def now():
@@ -22,8 +26,7 @@ def _on_status(client, userdata, msg):
 
 
 def _on_battery(client, userdata, msg):
-    print("[{}] [SUB] [BATTERY] {}".format(now(), str(msg.payload)))
-    # d = "BatteryData(level=65, isCharging=false)"
+    print("[{}] [SUB] [BATTERY] {}".format(now(), json.loads(msg.payload)))
     d = json.loads(msg.payload)["batteryData"]
 
     split_string = re.split('[= , ( )]', d)
@@ -38,12 +41,12 @@ def _on_goto(client, userdata, msg):
 
 
 def _on_user(client, userdata, msg):
-    print("[{}] [SUB] [USER] {}".format(now(), str(msg.payload)))
+    print("[{}] [SUB] [USER] {}".format(now(), json.loads(msg.payload)))
     userdata["user"] = json.loads(msg.payload)
 
 
 def _on_currentPosition(client, userdata, msg):
-    print("[{}] [SUB] [CURRENT POSITION] {}".format(now(), str(msg.payload)))
+    print("[{}] [SUB] [CURRENT POSITION] {}".format(now(), json.loads(msg.payload)))
     split_response = re.split('[= , )]', str(msg.payload))
     userdata["currentPosition"] = {"x": float(split_response[1]),
                                    "y": float(split_response[4]),
@@ -52,11 +55,13 @@ def _on_currentPosition(client, userdata, msg):
 
 
 def _on_durationToDestination(client, userdata, msg):
-    print("[{}] [SUB] [DURATION TO DESTINATION] {}".format(now(), str(msg.payload)))
+    print("[{}] [SUB] [DURATION TO DESTINATION] {}".format(now(), json.loads(msg.payload)))
     userdata["durationToDestination"] = json.loads(msg.payload)
 
+
 def _on_receiveTestConnection(client, userdata, msg):
-    print("[{}] [SUB] [TEST RECEIVE MESSAGE] {}".format(now(), msg.payload))
+    # print("[{}] [SUB] [TEST RECEIVE MESSAGE] {}".format(now(), msg.payload))
+    t = 1
 
 
 class Robot:
@@ -67,6 +72,7 @@ class Robot:
         self.client = mqtt_client
         self.id = temi_serial
         self.silent = silent
+        self.successfulResponse = False
 
         # set user data
         # initialized default values for temi robot for location and current position
@@ -100,8 +106,8 @@ class Robot:
         )
 
         # call method to initialize battery information
-        self.get_battery_data()
-        self.get_current_position()
+        self.getBatteryData()
+        self.getCurrentPosition()
         time.sleep(1)
 
     def checkIfDockingCompleted(self):
@@ -109,6 +115,265 @@ class Robot:
 
     def navigationCompleted(self):
         return self.status == "complete"
+
+    def stop(self):
+        """Stop"""
+        if not self.silent:
+            print("[CMD] Stop")
+
+        topic = "temi/" + self.id + "/command/move/stop"
+
+        try:
+            self.successfulResponse = False
+
+            responseTopic = "temi/" + self.id + "/responseTopic/move/stop"
+            requestId = str(uuid.uuid4())
+            timestamp = datetime.now().strftime("%Y-%M-%d %H:%M:%S")
+            payload = json.dumps({"requestId": requestId, "responseTopic": responseTopic, "timestamp": timestamp})
+
+            def stop_callback(client, userdata, msg):
+                if json.loads(msg.payload)["requestId"] == requestId:
+                    self.successfulResponse = True
+
+            self.client.message_callback_add(
+                responseTopic.format(self.id), stop_callback
+            )
+
+            # Generate message with response topic and correlation data
+            print("[{}] [PUB] [STOP] {}".format(now(), payload))
+            self.client.publish(topic, payload, qos=2)
+
+            # Loop to check if a response is received
+            # Will loop 5 times or until a response is received
+            for _ in range(5):
+                if not self.successfulResponse:
+                    time.sleep(0.5)
+                else:
+                    print("[{}] [SUCCESS] Response received for request ID: {}, {}".format(now(), requestId, topic))
+                    break
+
+            if not self.successfulResponse:
+                print("[{}] [ERROR] Response not received for request ID: {}, {}".format(now(), requestId, topic))
+
+        except Exception as e:
+            print("Exception received when stopping robot! ", e)
+
+    def goToLocation(self, location_name):
+        self.state["goto"]["location"] = location_name
+        self.state["goto"]["status"] = "start"
+
+        """Go to a saved location"""
+        if not self.silent:
+            print("[CMD] Go-To Location: {}".format(location_name))
+
+        topic = "temi/" + self.id + "/command/waypoint/goToLocation"
+
+        try:
+            self.successfulResponse = False
+
+            responseTopic = "temi/" + self.id + "/responseTopic/waypoint/goToLocation"
+            requestId = str(uuid.uuid4())
+            timestamp = datetime.now().strftime("%Y-%M-%d %H:%M:%S")
+            payload = json.dumps({"requestId": requestId, "location": location_name,
+                                  "responseTopic": responseTopic, "timestamp": timestamp})
+
+            def go_to_location_callback(client, userdata, msg):
+                if json.loads(msg.payload)["requestId"] == requestId:
+                    self.successfulResponse = True
+
+            self.client.message_callback_add(
+                responseTopic.format(self.id), go_to_location_callback
+            )
+
+            # Generate message with response topic and correlation data
+            print("[{}] [PUB] [GO TO LOCATION] {}".format(now(), payload))
+            self.client.publish(topic, payload, qos=2)
+
+            # Loop to check if a response is received
+            # Will loop 5 times or until a response is received
+            for _ in range(5):
+                if not self.successfulResponse:
+                    time.sleep(0.5)
+                else:
+                    print("[{}] [SUCCESS] Response received for request ID: {}, {}".format(now(), requestId, topic))
+                    break
+
+            if not self.successfulResponse:
+                print("[{}] [ERROR] Response not received for request ID: {}, {}".format(now(), requestId, topic))
+
+        except Exception as e:
+            print("Exception received when going to location! ", e)
+
+    def goToPosition(self, x, y, yaw, tiltAngle=22):
+        self.state["goto"]["location"] = "COORDINATES"
+        self.state["goto"]["status"] = "start"
+
+        """Go to a position"""
+        if not self.silent:
+            print("[CMD] Go-To Position:({}, {}), Angle = {} ".format(x, y, yaw))
+
+        topic = "temi/" + self.id + "/command/waypoint/goToPosition"
+        try:
+            self.successfulResponse = False
+
+            responseTopic = "temi/" + self.id + "/responseTopic/waypoint/goToPosition"
+            requestId = str(uuid.uuid4())
+            timestamp = datetime.now().strftime("%Y-%M-%d %H:%M:%S")
+            payload = json.dumps({"requestId": requestId, "x": x, "y": y, "yaw": yaw, "tiltAngle": tiltAngle,
+                                  "responseTopic": responseTopic, "timestamp": timestamp})
+
+            def go_to_position_callback(client, userdata, msg):
+                if json.loads(msg.payload)["requestId"] == requestId:
+                    self.successfulResponse = True
+
+            self.client.message_callback_add(
+                responseTopic.format(self.id), go_to_position_callback
+            )
+
+            # Generate message with response topic and correlation data
+            print("[{}] [PUB] [GO TO POSITION] {}".format(now(), payload))
+            self.client.publish(topic, payload, qos=2)
+
+            # Loop to check if a response is received
+            # Will loop 5 times or until a response is received
+            for _ in range(5):
+                if not self.successfulResponse:
+                    time.sleep(0.5)
+                else:
+                    print("[{}] [SUCCESS] Response received for request ID: {}, {}".format(now(), requestId, topic))
+                    break
+
+            if not self.successfulResponse:
+                print("[{}] [ERROR] Response not received for request ID: {}, {}".format(now(), requestId, topic))
+
+        except Exception as e:
+            print("Exception received when going to position! ", e)
+
+    def getBatteryData(self):
+        """Get Battery Data"""
+        if not self.silent:
+            print("[CMD] Get Battery Data")
+        topic = "temi/" + self.id + "/command/getData/batteryData"
+
+        try:
+            self.successfulResponse = False
+
+            responseTopic = "temi/" + self.id + "/responseTopic/getData/batteryData"
+            requestId = str(uuid.uuid4())
+            timestamp = datetime.now().strftime("%Y-%M-%d %H:%M:%S")
+            payload = json.dumps({"requestId": requestId, "responseTopic": responseTopic, "timestamp": timestamp})
+
+            def get_battery_data_callback(client, userdata, msg):
+                if json.loads(msg.payload)["requestId"] == requestId:
+                    self.successfulResponse = True
+
+            self.client.message_callback_add(
+                responseTopic.format(self.id), get_battery_data_callback
+            )
+
+            # Generate message with response topic and correlation data
+            print("[{}] [PUB] [BATTERY] {}".format(now(), payload))
+            self.client.publish(topic, payload, qos=2)
+
+            # Loop to check if a response is received
+            # Will loop 5 times or until a response is received
+            for _ in range(5):
+                if not self.successfulResponse:
+                    time.sleep(0.5)
+                else:
+                    print("[{}] [SUCCESS] Response received for request ID: {}, {}".format(now(), requestId, topic))
+                    break
+
+            if not self.successfulResponse:
+                print("[{}] [ERROR] Response not received for request ID: {}, {}".format(now(), requestId, topic))
+
+        except Exception as e:
+            print("Exception received when getting battery data! ", e)
+
+    def getCurrentPosition(self):
+        """Get Current Position"""
+        if not self.silent:
+            print("[CMD] Current Position")
+
+        topic = "temi/" + self.id + "/command/getData/currentPosition"
+
+        try:
+            self.successfulResponse = False
+
+            responseTopic = "temi/" + self.id + "/responseTopic/getData/currentPosition"
+            requestId = str(uuid.uuid4())
+            timestamp = datetime.now().strftime("%Y-%M-%d %H:%M:%S")
+            payload = json.dumps({"requestId": requestId, "responseTopic": responseTopic, "timestamp": timestamp})
+
+            def get_current_position_callback(client, userdata, msg):
+                if json.loads(msg.payload)["requestId"] == requestId:
+                    self.successfulResponse = True
+
+            self.client.message_callback_add(
+                responseTopic.format(self.id), get_current_position_callback
+            )
+
+            # Generate message with response topic and correlation data
+            print("[{}] [PUB] [CURRENT POSITION] {}".format(now(), payload))
+            self.client.publish(topic, payload, qos=2)
+
+            # Loop to check if a response is received
+            # Will loop 5 times or until a response is received
+            for _ in range(5):
+                if not self.successfulResponse:
+                    time.sleep(0.5)
+                else:
+                    print("[{}] [SUCCESS] Response received for request ID: {}, {}".format(now(), requestId, topic))
+                    break
+
+            if not self.successfulResponse:
+                print("[{}] [ERROR] Response not received for request ID: {}, {}".format(now(), requestId, topic))
+
+        except Exception as e:
+            print("Exception received when getting current position! ", e)
+
+    def loadMap(self, mapName, x=0.0, y=0.0, yaw=0.0, tiltAngle=22):
+        """Load Map: Will be loaded to position (0, 0) in new map by default if no position is specified"""
+        if not self.silent:
+            print("[CMD] Load New Map with Map Name = {} ".format(mapName))
+
+        topic = "temi/" + self.id + "/command/getData/loadMap"
+
+        try:
+            self.successfulResponse = False
+
+            responseTopic = "temi/" + self.id + "/responseTopic/getData/loadMap"
+            requestId = str(uuid.uuid4())
+            timestamp = datetime.now().strftime("%Y-%M-%d %H:%M:%S")
+            payload = json.dumps({"requestId": requestId, "mapName": mapName, "x": x, "y": y, "yaw": yaw,
+                                  "tiltAngle": tiltAngle, "responseTopic": responseTopic, "timestamp": timestamp})
+
+            def load_map_callback(client, userdata, msg):
+                if json.loads(msg.payload)["requestId"] == requestId:
+                    self.successfulResponse = True
+
+            self.client.message_callback_add(
+                responseTopic.format(self.id), load_map_callback
+            )
+
+            # Generate message with response topic and correlation data
+            print("[{}] [PUB] [LOAD MAP] {}".format(now(), payload))
+            self.client.publish(topic, payload, qos=2)
+
+            # Loop to check if a response is received
+            # Will loop 5 times or until a response is received
+            for _ in range(5):
+                if not self.successfulResponse:
+                    time.sleep(0.5)
+                else:
+                    print("[{}] [SUCCESS] Response received for request ID: {}, {}".format(now(), requestId, topic))
+                    break
+
+            if not self.successfulResponse:
+                print("[{}] [ERROR] Response not received for request ID: {}, {}".format(now(), requestId, topic))
+
+        except Exception as e:
+            print("Exception received when loading map! ", e)
 
     def rotate(self, angle):
         """Rotate"""
@@ -121,16 +386,6 @@ class Robot:
 
             self.client.publish(topic, payload, qos=0)
 
-    def joystick(self, x, y):
-        """Joystick"""
-        if not self.silent:
-            print("[CMD] Translate: {} {} [unitless]".format(x, y))
-
-        topic = "temi/" + self.id + "/command/move/joystick"
-        payload = json.dumps({"x": x, "y": y})
-
-        self.client.publish(topic, payload, qos=0)
-
     def tilt(self, angle):
         """Tilt head (absolute angle)"""
         if not self.silent:
@@ -141,25 +396,6 @@ class Robot:
 
         self.client.publish(topic, payload, qos=0)
 
-    def tilt_by(self, angle):
-        """Tilt head (relative angle)"""
-        if not self.silent:
-            print("[CMD] Tilt By: {} [deg]".format(angle))
-
-        topic = "temi/" + self.id + "/command/move/tilt_by"
-        payload = json.dumps({"angle": angle})
-
-        self.client.publish(topic, payload, qos=0)
-
-    def stop(self):
-        """Stop"""
-        if not self.silent:
-            print("[CMD] Stop")
-
-        topic = "temi/" + self.id + "/command/move/stop"
-
-        self.client.publish(topic, "{}", qos=1)
-
     def follow(self):
         """Follow"""
         if not self.silent:
@@ -169,31 +405,15 @@ class Robot:
 
         self.client.publish(topic, "{}", qos=1)
 
-    def goToLocation(self, location_name):
-        self.state["goto"]["location"] = location_name
-        self.state["goto"]["status"] = "start"
-
-        """Go to a saved location"""
+    def joystick(self, x, y):
+        """Joystick"""
         if not self.silent:
-            print("[CMD] Go-To: {}".format(location_name))
+            print("[CMD] Translate: {} {} [unitless]".format(x, y))
 
-        topic = "temi/" + self.id + "/command/waypoint/goToLocation"
-        payload = json.dumps({"location": location_name})
+        topic = "temi/" + self.id + "/command/move/joystick"
+        payload = json.dumps({"x": x, "y": y})
 
-        self.client.publish(topic, payload, qos=1)
-
-    def goToPosition(self, x, y, yaw, tiltAngle=22):
-        self.state["goto"]["location"] = "COORDINATES"
-        self.state["goto"]["status"] = "start"
-
-        """Go to a position"""
-        if not self.silent:
-            print("[CMD] Go-To Position:({}, {}), Angle = {} ".format(x, y, yaw))
-
-        topic = "temi/" + self.id + "/command/waypoint/goToPosition"
-        payload = json.dumps({"x": x, "y": y, "yaw": yaw, "tiltAngle": tiltAngle})
-
-        self.client.publish(topic, payload, qos=1)
+        self.client.publish(topic, payload, qos=0)
 
     def tts(self, text):
         # print(self.currentPosition)
@@ -223,46 +443,6 @@ class Robot:
 
         topic = "temi/" + self.id + "/command/media/webview"
         payload = json.dumps({"url": url})
-
-        self.client.publish(topic, payload, qos=1)
-
-    def custom(self, topic, data):
-        """Send custom message"""
-        if not self.silent:
-            print("[CMD] Custom")
-
-        topic = "temi/" + self.id + topic
-        payload = json.dumps(data)
-
-        self.client.publish(topic, payload, qos=1)
-
-    def get_battery_data(self):
-        """Get Battery Data"""
-        if not self.silent:
-            print("[CMD] Get Battery Data")
-        topic = "temi/" + self.id + "/command/getData/batteryData"
-
-        try:
-            self.client.publish(topic, "{}", qos=1)
-        except Exception as e:
-            print("Exception received when getting battery data! ", e)
-
-    def get_current_position(self):
-        """Get Current Position"""
-        if not self.silent:
-            print("[CMD] Get Current Position")
-
-        topic = "temi/" + self.id + "/command/getData/currentPosition"
-
-        self.client.publish(topic, "{}", qos=1)
-
-    def loadMap(self, mapName, x=0.0, y=0.0, yaw=0.0, tiltAngle=22):
-        """Load Map: Will be loaded to position (0, 0) in new map by default if no position is specified"""
-        if not self.silent:
-            print("[CMD] Load New Map with Map Name = {} ".format(mapName))
-
-        topic = "temi/" + self.id + "/command/getData/loadMap"
-        payload = json.dumps({"mapName": mapName, "x": x, "y": y, "yaw": yaw, "tiltAngle": tiltAngle})
 
         self.client.publish(topic, payload, qos=1)
 
